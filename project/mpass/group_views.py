@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import GroupModel
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+
+from .models import GroupModel
+
 import json
 
 
+@login_required
 def groups(request):
     obj = GroupModel.objects.all()
     context = {
@@ -13,6 +17,7 @@ def groups(request):
     return render(request, 'mpass/groups.html', context=context)
 
 
+@login_required
 def new_group(request):
     if request.method == 'POST':
         name = json.loads(request.body)
@@ -27,6 +32,7 @@ def new_group(request):
         return redirect('groups')
 
 
+@login_required
 def group_edit(request, id_, new_name=None):
     obj = get_object_or_404(GroupModel, id=id_)
     try:
@@ -38,6 +44,7 @@ def group_edit(request, id_, new_name=None):
         return JsonResponse("Ok", safe=False)
 
 
+@login_required
 def group_delete(request, id_):
     obj = get_object_or_404(GroupModel, id=id_)
     try:

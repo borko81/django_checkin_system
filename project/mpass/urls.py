@@ -1,4 +1,6 @@
 from django.urls import path
+from django.contrib.auth import views as login_view
+
 from .views import index
 from .group_views import (
     groups, group_edit,
@@ -23,7 +25,12 @@ from .emotial_view import (
 )
 
 urlpatterns = [
-    path('index/', index, name='index'),
+    # Login
+    path('login/', login_view.LoginView.as_view(), name="login"),
+    path('logout/', login_view.LogoutView.as_view(), name="logout"),
+
+    # First page
+    path('', index, name='index'),
     
     # Groups
     path('groups/', groups, name='groups'),

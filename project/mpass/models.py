@@ -15,29 +15,33 @@ class PersonInformationModel(models.Model):
     objects = None
     name = models.CharField(max_length=120)
     group = models.ForeignKey(
-        GroupModel, on_delete=models.CASCADE,
-        blank=False, null=False
+        GroupModel, on_delete=models.CASCADE, blank=False, null=False
     )
     tel = models.CharField(max_length=32, null=True, blank=True)
-    picture = models.ImageField(upload_to='person_image', null=True, blank=True)
+    picture = models.ImageField(upload_to="person_image", null=True, blank=True)
 
     def __str__(self):
         return self.name
-    
+
     def to_dict(self):
-        return {"name": self.name, "group": self.group.name, "tel": self.tel, "picture": self.picture}
+        return {
+            "name": self.name,
+            "group": self.group.name,
+            "tel": self.tel,
+            "picture": self.picture,
+        }
 
 
 class CardManagerWithoutPerson(models.Manager):
     def get_queryset(self):
         return super().get_queryset().all()
-    
+
     def without_person(self):
         return self.get_queryset().filter(person_id__isnull=True)
-    
+
     def stoped_card(self):
         return self.get_queryset().filter(is_valid=False)
-    
+
     def not_stoped_card(self):
         return self.get_queryset().filter(is_valid=True)
 
@@ -46,23 +50,28 @@ class CardsModel(models.Model):
     card = models.CharField(max_length=12, unique=True, null=False)
     is_valid = models.BooleanField(default=True)
     person_id = models.ForeignKey(
-        PersonInformationModel, on_delete=models.CASCADE,
-        blank=True, null=True
+        PersonInformationModel, on_delete=models.CASCADE, blank=True, null=True
     )
     valid_from = models.DateField(null=True, blank=True)
     valid_to = models.DateField(null=True, blank=True)
-    
+
     # manager
     objects = models.Manager()
     custom_manager = CardManagerWithoutPerson()
 
     def __str__(self):
         return self.card
-    
+
     def to_dict(self):
-        return {"id": self.id, "name": self.card, "is_valid": self.is_valid, "person_id": self.person_id.id, "from": self.valid_from, "to": self.valid_to}
-    
-    
+        return {
+            "id": self.id,
+            "name": self.card,
+            "is_valid": self.is_valid,
+            "person_id": self.person_id.id,
+            "from": self.valid_from,
+            "to": self.valid_to,
+        }
+
     def save(self, *args, **kwargs):
         if self.person_id is None or self.is_valid is False:
             self.valid_from = None
@@ -76,13 +85,10 @@ def update_valid_date(sender, instance, **kwargs):
 
 
 class ActionModel(models.Model):
-    IN = 'IN'
-    OUT = 'OUT'
+    IN = "IN"
+    OUT = "OUT"
 
-    action_data = [
-        (IN, 'INCOME'),
-        (OUT, 'OUTCOME')
-    ]
+    action_data = [(IN, "INCOME"), (OUT, "OUTCOME")]
 
     card_id = models.ForeignKey(CardsModel, on_delete=models.CASCADE)
     person_id = models.ForeignKey(PersonInformationModel, on_delete=models.CASCADE)
@@ -91,6 +97,7 @@ class ActionModel(models.Model):
 
     def __str__(self):
         return self.card_id.card
+
 
 class OnlyInHouse(models.Model):
     card = models.ForeignKey(CardsModel, on_delete=models.CASCADE)
@@ -104,7 +111,7 @@ def only_in_house(sender, instance, **kwargs):
     action = instance.action
     card_id = instance.card_id
 
-    if action == 'IN':
+    if action == "IN":
         OnlyInHouse.objects.create(card=card_id)
     else:
         try:

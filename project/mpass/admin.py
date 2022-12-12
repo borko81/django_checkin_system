@@ -10,7 +10,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(PersonInformationModel)
 class PersonInfoAdmin(admin.ModelAdmin):
-    list_display = 'name group'.split()
+    list_display = "name group".split()
 
 
 @admin.register(CardsModel)
@@ -21,6 +21,7 @@ class CardAdmin(admin.ModelAdmin):
 @admin.register(ActionModel)
 class ActionAdmin(admin.ModelAdmin):
     pass
+
 
 @admin.register(OnlyInHouse)
 class OnlyInHouseAdmin(admin.ModelAdmin):
