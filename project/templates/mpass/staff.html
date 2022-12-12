@@ -1,0 +1,104 @@
+{% extends 'mpass/base.html' %}
+{% load static %}
+{% load customtags %}
+{% block content %}
+    {% if not persons %}
+        <a href="{% url 'new_person' %}" class="btn btn-secondary form-control my-2">Oще няма данни, може да въведете нов запис</a>
+    {% else %}
+        <a href="{% url 'new_person' %}" class="btn btn-secondary form-control my-2">Нов запис</a>
+    {% endif %}
+    <div class="panel panel-default">
+        <div class="panel-body panel-resizable" style="height:26em">
+            <table class="table">
+                <thead class="table-dark">
+                    <th>Име</th>
+                    <th>Група</th>
+                    <th>Телефон</th>
+                    <th>Снимка</th>
+                    <th colspan="2" mx-auto>Деиствие</th>
+                </thead>
+                <tbody>
+                    {% for person in persons %}
+                        <tr>
+                            <td>{{person.name}}</td>
+                            <td>{{person.group}}</td>
+                            <td>{{person.tel|default:""}}</td>
+                            {% if person.picture %}
+                                <td>
+                                    <a href="{% url 'person_detail' id_=person.id %}" class="text-success myBtn" data-pictureid={{person.id}}>&#10003;</a>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <a href="#" class="text-danger">&#10008;</a>
+                                </td>
+                            {% endif %}
+                            <td><a href="{% url 'new_person' id_=person.id %}" class="btn btn-sm btn-success">Редакция</a></td>
+                            <td><a href="{% url 'delete_person' id_=person.id %}" class="btn btn-sm btn-danger cls_delete">Изтриване</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Modal windows show person image -->
+    {% include 'mpass/modal.html' %}
+{% endblock content %}
+{% block leftcontent %}
+    <ul class="list-group list-group-flush mt-10 ">
+        <li class="list-group-item"><a href="{% url 'persons' %}">* : {{count_person_in_groups.values|total_sum}}</li>
+        {% for k, v in count_person_in_groups.items %}
+            <li class="list-group-item"><a href="{% url 'persons' %}?order_by={{k}}">{{k}} : {{v}}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock leftcontent %}
+<!-- Script tag -->
+{% block endscript %}
+    <script type="text/javascript">
+    let class_delete = document.querySelectorAll('.cls_delete');
+    class_delete.forEach(x => {
+    x.addEventListener("click", event => {
+    event.preventDefault()
+    let answer = confirm('Наистина ли искате да изтриете елемента?')
+    if (answer) {
+    window.location.href = event.target.getAttribute("href");
+    }
+    })
+    })
+    // Modal
+    var modal = document.getElementById("myModal");
+    var btn = document.querySelectorAll(".myBtn")
+    var span = document.getElementsByClassName("close")[0];
+    btn.forEach(x => {
+    x.addEventListener("click", event => {
+    event.preventDefault()
+    const id_ = event.target.getAttribute("data-pictureid")
+    const URL_DETAIL = event.target.getAttribute('href')
+    fetch(URL_DETAIL, {
+    method: "GET",
+    headers: {
+    'Content-Type': 'application/json'
+    },
+    })
+    .then(response => response.json())
+    .then(data => {
+    let person_image_path = document.getElementById("person_image_path")
+    let img_path = data['picture']
+    person_image_path.src = `../media/${img_path}`
+    })
+    
+    modal.style.display = "block";
+    })
+    })
+    btn.onclick = function() {
+    modal.style.display = "block";
+    }
+    span.onclick = function() {
+    modal.style.display = "none";
+    }
+    window.onclick = function(event) {
+    if (event.target == modal) {
+    modal.style.display = "none";
+    }
+    }
+    </script>
+{% endblock endscript %}

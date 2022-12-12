@@ -1,0 +1,17 @@
+{% extends 'mpass/base.html' %}
+
+{% block content %}
+{% if messages %}
+{% if error == 'No' %}
+<p class="text-success mx-auto">{{ messages }}</p>
+{% else %}
+<p class="text-danger mx-auto">{{ messages }}</p>
+{% endif %}
+{% endif %}
+<hr>
+<form action="" method="POST" enctype='multipart/form-data'>
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" class="btn btn-sm btn-success form-control mt-2 form_submit_button">
+</form>
+{% endblock content %}

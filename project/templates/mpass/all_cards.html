@@ -1,0 +1,56 @@
+{% extends 'mpass/base.html' %}
+{% block content %}
+    {% if not all_cards %}
+        <a href="{% url 'create_new_card' %}" class="btn btn-secondary form-control my-2">Oще няма данни, може да въведете нов запис</a>
+    {% else %}
+        <a href="{% url 'create_new_card' %}" class="btn btn-secondary form-control my-2">Нов запис</a>
+    {% endif %}
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Card</th>
+                <th>Притежател</th>
+                <th>Активна</th>
+                <th>Валидна от</th>
+                <th>Валидна до</th>
+                <th colspan="2" mx-auto>Деиствие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in all_cards %}
+                <tr>
+                    <td>{{c.id}}</td>
+                    <td>{{c.card}}</td>
+                    <td>{{c.person_id|default:""}}</td>
+                    <td>{{c.is_valid|yesno:"Да,Не"}}</td>
+                    <td>{{c.valid_from|default:""|date:"d.m.Y"}}</td>
+                    <td>{{c.valid_to|default:""|date:"d.m.Y"}}</td>
+                    <td><a href="{% url 'edit_card' id_=c.id %}" class="btn btn-sm btn-success">Редакция</a></td>
+                    <td><a href="{% url 'delete_card' id_=c.id %}" class="btn btn-sm btn-danger cls_delete">Изтриване</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
+{% block leftcontent %}
+    <ul class="list-group list-group-flush mt-10">
+        <li class="list-group-item"><a href="{% url 'show_all_cards' %}">Всичко</a></li>
+        <li class="list-group-item"><a href="{% url 'show_all_cards' %}?order=without_person">Не назначени</a></li>
+        <li class="list-group-item"><a href="{% url 'show_all_cards' %}?order=stoped">Спрени</a></li>
+    </ul>
+{% endblock leftcontent %}
+{% block endscript %}
+    <script type="text/javascript">
+    let class_delete = document.querySelectorAll('.cls_delete');
+    class_delete.forEach(x => {
+    x.addEventListener("click", event => {
+    event.preventDefault()
+    let answer = confirm('Наистина ли искате да изтриете елемента?')
+    if (answer) {
+    window.location.href = event.target.getAttribute("href");
+    }
+    })
+    })
+    </script>
+{% endblock endscript %}

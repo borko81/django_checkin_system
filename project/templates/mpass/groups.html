@@ -1,0 +1,114 @@
+{% extends 'mpass/base.html' %}
+
+{% block content %}
+{% if not obj %}
+<h5>Все още няма групи, може да въведете нова</h5>
+{% else %}
+<table class="table">
+    <thead class="table-dark">
+    <tr>
+        <th>#</th>
+        <th>Име</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for o in obj %}
+    <tr>
+        <td>
+            {{o.id}}
+        </td>
+        <td>
+            <input type="text" value="{{o.name}}" class="custom_input" readonly data-name="{{o.id}}">
+        </td>
+        <td>
+            <a href="{% url 'group_edit' o.id %}" class="btn btn-sm btn-success a_change"
+               data-change="{{o.id}}">Промяна</a>
+        </td>
+        <td>
+            <a href="{% url 'group_delete' o.id %}" class="btn btn-sm btn-danger" data-delete="{{o.id}}">Изтриване</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="text" placeholder="Нова група..." name="new_group" class="new_group">
+    <input type="submit" class="btn btn-sm btn-secondary" id="new_group">
+</form>
+{% endblock content %}
+
+{% block endscript %}
+<script type="application/javascript">
+let a_change = document.querySelectorAll('.a_change');
+let inputs_for_change = document.querySelectorAll('.custom_input');
+let btn_delete = document.querySelectorAll('.btn-danger');
+let button_for_new = document.querySelector('#new_group')
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+a_change.forEach(x => x.addEventListener("click", event => {
+    event.preventDefault()
+    let id_for_search = event.target.attributes["data-change"].nodeValue
+
+    inputs_for_change.forEach(y => {
+            let target = y.getAttribute('data-name')
+            if(target == id_for_search){
+            y.classList.add("for_change")
+            y.removeAttribute('readonly')
+            x.text = "Запазване"
+            x.addEventListener("click", function () {
+            let URL = x.getAttribute("href") + y.value;
+                fetch(URL, {
+                    method: "GET",
+                    headers: {
+                        "Content-type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(d => {
+                    console.log(d)
+                })
+                x.text = "Промяна"
+                y.classList.remove("for_change")
+                y.readOnly = true
+            })
+        }
+    })
+}))
+
+btn_delete.forEach(d => {
+    d.addEventListener("click", event => {
+        event.preventDefault()
+        let choice = confirm("Are you sure")
+        if (choice) {
+            window.location.href = d.getAttribute("href")
+        }
+    })
+})
+
+button_for_new.addEventListener("click", event => {
+    event.preventDefault()
+    let url_for_new = "{% url 'new_group' %}"
+    let new_name = document.querySelector('[name=new_group]').value;
+    
+    fetch(url_for_new, {
+        method: "POST",
+        body: JSON.stringify({"name": new_name}),
+        credentials: "same-origin",
+        headers: {
+            "Content-type": "application/json",
+            "X-CSRFToken": csrftoken,
+        }
+    })
+    .then(response => response.json())
+    window.location.href = "{% url 'groups' %}"
+
+
+})
+
+
+</script>
+{% endblock endscript %}

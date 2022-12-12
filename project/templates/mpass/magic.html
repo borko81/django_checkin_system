@@ -1,0 +1,71 @@
+{% extends 'mpass/base.html' %}
+{% block content %}
+	<form action="{% url 'show_in_out' %}" method="POST">
+		{% csrf_token %}
+		<input type="text" class="form-control" name="card">
+	</form>
+	<table class="table">
+		<thead class="table-dark">
+			<th>Дата</th>
+			<th>Човек</th>
+			<th>Група</th>
+			<th>Действие</th>
+		</thead>
+		<tbody>
+			{% for action in actions %}
+				<tr class='{{action.action}}'>
+					<td>{{action.data_time|date:"d.m.Y h:m:s"}}</td>
+					<td>
+						<a href="{% url 'person_detail' action.person_id.id %}" data-pictureid={{action.person_id.id}} class="myBtn link-dark">{{action.person_id.name}}</a></td>
+						<td>{{action.person_id.group.name}}</td>
+						<td>{{action.action}}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{% include 'mpass/modal.html' %}
+	{% endblock content %}
+	{% block leftcontent %}
+		<div class="mt-10">
+			<h5 class='errors {{message|default:""}}'>{{message|default:""}}</h5>
+		</div>
+	{% endblock leftcontent %}
+	{% block endscript %}
+		<script>
+		// Modal
+		var modal = document.getElementById("myModal");
+		var btn = document.querySelectorAll(".myBtn")
+		var span = document.getElementsByClassName("close")[0];
+		btn.forEach(x => {
+		x.addEventListener("click", event => {
+		event.preventDefault()
+		const id_ = event.target.getAttribute("data-pictureid")
+		const URL_DETAIL = event.target.getAttribute('href')
+		fetch(URL_DETAIL, {
+		method: "GET",
+		headers: {
+		'Content-Type': 'application/json'
+		},
+		})
+		.then(response => response.json())
+		.then(data => {
+		let person_image_path = document.getElementById("person_image_path")
+		let img_path = data['picture']
+		person_image_path.src = `../media/${img_path}`
+		})
+		modal.style.display = "block";
+		})
+		})
+		btn.onclick = function() {
+		modal.style.display = "block";
+		}
+		span.onclick = function() {
+		modal.style.display = "none";
+		}
+		window.onclick = function(event) {
+		if (event.target == modal) {
+		modal.style.display = "none";
+		}
+		}
+		</script>
+	{% endblock endscript %}
