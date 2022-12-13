@@ -101,6 +101,7 @@ class ActionModel(models.Model):
 
 class OnlyInHouse(models.Model):
     card = models.ForeignKey(CardsModel, on_delete=models.CASCADE)
+    when_come = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return self.card.card
@@ -110,9 +111,10 @@ class OnlyInHouse(models.Model):
 def only_in_house(sender, instance, **kwargs):
     action = instance.action
     card_id = instance.card_id
+    when_come = instance.data_time
 
     if action == "IN":
-        OnlyInHouse.objects.create(card=card_id)
+        OnlyInHouse.objects.create(card=card_id, when_come=when_come)
     else:
         try:
             target = OnlyInHouse.objects.get(card=card_id)

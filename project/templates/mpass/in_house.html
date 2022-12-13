@@ -1,24 +1,17 @@
 {% extends 'mpass/base.html' %}
 {% block content %}
-	<table class="table">
-		<thead class="table-dark">
-			<tr>
-				<th>Човек</th>
-				<th>Група</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for result in people_in_house %}
-				<tr>
-					<td>
-						{{ result.card.person_id }}
-					</td>
-					<td>
-						{{ result.card.person_id.group }}
-					</td>
-				</tr>
-			{% endfor %}
-			
-		</tbody>
-	</table>
+	<div class="show_result mt-5">
+		{% for result in people_in_house  %}
+			<div class="card my-2 mx-2">
+				{% if result.card.person_id.picture %}
+					<img class="card-img-top" src="../media/{{result.card.person_id.picture}}" alt="">
+				{% endif %}
+				<div class="card-body">
+					<h5 class="card-title">{{ result.card.person_id }}</h5>
+					<p class="card-text">{{ result.card.person_id.group }}</p>
+					<small>{{ result.when_come }}</small>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
 {% endblock content %}
