@@ -1,0 +1,74 @@
+{% extends 'mpass/base.html' %}
+{% block content %}
+	<div>
+		<form action="" method="POST">
+			{% csrf_token %}
+			<div class="form-group">
+				<label for="from">От Дата</label>
+				<input type="date" name="from" id="from" placeholder="От Дата" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="to">До Дата</label>
+				<input type="date" name="to" id="to" placeholder="До Дата" class="form-control">
+			</div>
+			<input type="submit" value=Load class="btn btn-sm btn-success form-control my-2">
+		</form>
+		{% if result %}
+			<table class="table" id="myTable">
+				<thead class="table-dark">
+					<th>Група</th>
+					<th>
+						<select id="myInput" onchange=filterFunction()>
+							<option value="">---</option>
+							{% for p in persons %}
+								<option value="{{p}}">{{p}}</option>
+							{% endfor %}
+						</select>
+					</th>
+					<th>Деиствие</th>
+					<th>Дата</th>
+				</thead>
+				<tbody>
+					{% for r in result %}
+						<tr>
+							<td>{{r.person_id.group.name}}</td>
+							<td>{{r.person_id.name}}</td>
+							<td>{{r.action}}</td>
+							<td>{{r.data_time|date:"d.m.Y h:i:s"}}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% endif %}
+	</div>
+{% endblock content %}
+{% block endscript %}
+	<script>
+		let from = document.getElementById("from")
+		let to = document.getElementById('to')
+		from.addEventListener('click', event => {
+			event.target.showPicker()
+		})
+	
+		to.addEventListener('click', event => {
+			event.target.showPicker()
+		})
+		function filterFunction() {
+			let input, filter, table, tr, td, i, txtValue
+			filter = document.getElementById("myInput").value
+			table = document.getElementById("myTable")
+			tr = table.getElementsByTagName("tr")
+			for (i=0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[1]
+				if (td) {
+					txtValue = td.textContent || td.innerText
+					if (txtValue.indexOf(filter) > -1) {
+						tr[i].style.display = ""
+					} else {
+						tr[i].style.display = "none"
+					}
+				}
+			}
+		}
+	</script>
+{% endblock endscript %}

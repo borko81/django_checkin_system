@@ -2,7 +2,7 @@
 {% block content %}
 	<form action="{% url 'show_in_out' %}" method="POST">
 		{% csrf_token %}
-		<input type="text" class="form-control" name="card">
+		<input type="text" class="form-control" name="card" autofocus>
 	</form>
 	<table class="table">
 		<thead class="table-dark">

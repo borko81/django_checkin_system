@@ -21,7 +21,7 @@ from .action_view import (
 )
 
 from .emotial_view import (
-    show_all_in_house
+    show_all_in_house, passage
 )
 
 urlpatterns = [
@@ -58,4 +58,5 @@ urlpatterns = [
 
     # Emotial
     path('inhouse/', show_all_in_house, name='inhouse'),
+    path('passage/', passage, name='passage'),
 ]
