@@ -21,7 +21,8 @@ from .action_view import (
 )
 
 from .emotial_view import (
-    show_all_in_house, passage
+    show_all_in_house, passage,
+    total_time_in_house
 )
 
 urlpatterns = [
@@ -59,4 +60,5 @@ urlpatterns = [
     # Emotial
     path('inhouse/', show_all_in_house, name='inhouse'),
     path('passage/', passage, name='passage'),
+    path('total_time/', total_time_in_house, name='total_time'),
 ]
