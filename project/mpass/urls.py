@@ -2,6 +2,7 @@ from django.urls import path
 from django.contrib.auth import views as login_view
 
 from .views import index
+
 from .group_views import (
     groups, group_edit,
     group_delete, new_group
