@@ -5,26 +5,29 @@ from .models import OwnerModel, OwnerNumbers, BankAcc, Contragent, FakId, FakEle
 
 @admin.register(OwnerModel)
 class OwnerModelAdmin(admin.ModelAdmin):
-	pass
+    list_display = "name bulstat".split()
+
 
 @admin.register(OwnerNumbers)
 class OwnerNumbersAdmin(admin.ModelAdmin):
-	pass
+    pass
+
 
 @admin.register(BankAcc)
 class BankAccAdmin(admin.ModelAdmin):
-	pass
+    pass
 
 
 @admin.register(Contragent)
 class ContragentAdmin(admin.ModelAdmin):
-	list_display = 'name bulstat'.split()
+    list_display = "name bulstat is_active".split()
 
 
 @admin.register(FakId)
 class FakIdAdmin(admin.ModelAdmin):
-	pass
+    list_display = "number tip pay_type fak_total contract_id data_sdelka".split()
+
 
 @admin.register(FakElelements)
 class FakElelements(admin.ModelAdmin):
-	pass
+    pass
