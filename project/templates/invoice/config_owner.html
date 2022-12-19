@@ -1,0 +1,8 @@
+{% extends 'invoice/invoice_base.html' %}
+{% block content %}
+	<form action="{% url 'invoice_menu' %}" method="POST">
+		{% csrf_token %}
+		{{form}}
+		<input type="submit" value="Save" class="btn btn-sm mt-2 form-control btn-success">
+	</form>
+{% endblock content %}

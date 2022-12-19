@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+		<title>{{title}}</title>
+		<style>
+			.del {
+				text-decoration-line: line-through;
+			}
+			.input_clean {
+				outline: none;
+				border-color: inherit;
+				-webkit-box-shadow: none;
+				box-shadow: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark mt-2">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="{% url 'invoice_menu' %}">Invoice Menu</a>
+					</div>
+					<ul class="nav navbar-nav">
+						<li class="nav-item"><a href="{% url 'owner' %}" class="nav-link">Owner</a></li>
+						<li class="nav-item"><a href="{% url 'contracts' %}" class="nav-link">Contract</a></li>
+						<li class="nav-item"><a href="{% url 'generate_new' %}" class="nav-link">New Invoice</a></li>
+						<li class="nav-item"><a href="{% url 'show_all_invoices' %}" class="nav-link">Show All</a></li>
+					</ul>
+				</div>
+			</nav>
+		{% block content %}{% endblock content %}
+	</div>
+</body>
+</html>

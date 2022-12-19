@@ -1,0 +1,55 @@
+{% extends 'invoice/invoice_base.html' %}
+{% block content %}
+	<a href="{% url 'contract_new' %}" class="btn btn-success form-control my-2">Create New</a>
+	<table class="table" id="myTable">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Town</th>
+				<th>Address</th>
+				<th>Mol</th>
+				<th><input type="text" placeholder="Search for bulstat" class="input_clean" id="myInput" onkeyup="filterFunction()"></th>
+				<th>IdNum</th>
+				<th>IsActive</th>
+				<th>Edit</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for contract in contracts %}
+				{% if contract.is_active %}
+					<tr>
+					{% else %}
+						<tr class="del">
+						{% endif %}
+						<td>{{ contract.name }}</td>
+						<td>{{contract.town}}</td>
+						<td>{{contract.address}}</td>
+						<td>{{contract.mol}}</td>
+						<td>{{contract.bulstat}}</td>
+						<td>{{contract.idmum|default:""}}</td>
+						<td>{{contract.is_active}}</td>
+						<td><a href="{% url 'contract_edit' contract.id %}" class="btn btn-sm btn-success">Edit</a></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<script>
+			function filterFunction() {
+			let input, filter, table, tr, td, i, txtValue
+			filter = document.getElementById("myInput").value
+			table = document.getElementById("myTable")
+			tr = table.getElementsByTagName("tr")
+			for (i=0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[4]
+				if (td) {
+					txtValue = td.textContent || td.innerText
+					if (txtValue.indexOf(filter) > -1) {
+						tr[i].style.display = ""
+					} else {
+						tr[i].style.display = "none"
+					}
+				}
+			}
+		}
+		</script>
+	{% endblock content %}

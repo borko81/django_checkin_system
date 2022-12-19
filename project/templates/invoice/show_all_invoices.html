@@ -1,0 +1,35 @@
+{% extends 'invoice/invoice_base.html' %}
+{% block content %}
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Number</th>
+				<th>Type</th>
+				<th>PayType</th>
+				<th>Net</th>
+				<th>Vat</th>
+				<th>Vat Sum</th>
+				<th>Total</th>
+				<th>contract_id</th>
+				<th>data_sdelka</th>
+				<th>data_padej</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for invoice in invoices %}
+				<tr>
+					<td>{{invoice.number}}</td>
+					<td>{{invoice.get_tip_display}}</td>
+					<td>{{invoice.get_pay_type_display}}</td>
+					<td>{{invoice.neto}}</td>
+					<td>{{invoice.dds}}</td>
+					<td>{{invoice.dds_suma}}</td>
+					<td>{{invoice.fak_total}}</td>
+					<td>{{invoice.contract_id}}</td>
+					<td>{{invoice.data_sdelka|date:"d.m.Y"}}</td>
+					<td>{{invoice.data_padej|default:""|date:"d.m.Y"}}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock content %}

@@ -1,0 +1,29 @@
+{% extends 'invoice/invoice_base.html' %}
+{% block content %}
+	
+	<form action="" method="POST">
+		{% csrf_token %}
+		{{ form }}
+		<input type="submit" value="Save" id="save">
+	</form>
+	
+	<script>
+		let name, town, address, mol, bulstat, idmum, is_active, save;
+		
+		name = document.querySelector("#id_name")
+		town = document.querySelector("#id_town")
+		address = document.querySelector("#id_address")
+		mol = document.querySelector("#id_mol")
+		bulstat = document.querySelector("#id_bulstat")
+		idmum = document.querySelector("#id_idmum")
+		is_active = document.querySelector("#id_is_active")
+		save = document.querySelector("#save")
+		name.classList.add("form-control")
+		town.classList.add("form-control")
+		address.classList.add("form-control")
+		mol.classList.add("form-control")
+		bulstat.classList.add("form-control")
+		idmum.classList.add("form-control")
+		save.classList.add("form-control", "btn", "btn-sm", "btn-success")
+	</script>
+{% endblock content %}
