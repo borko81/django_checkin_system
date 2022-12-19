@@ -1,4 +1,4 @@
-# django_checkin_system
+# django_checkin_system, add invoice part too
 System for check in/out
 
 Login page
