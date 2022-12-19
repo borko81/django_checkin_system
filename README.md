@@ -45,5 +45,13 @@ Show invoice
 
 ![show_fac](https://user-images.githubusercontent.com/50569248/208314713-d60bfd75-c142-493d-95c7-cc1238621a63.png)
 
+Show and edit contract
+
+![contract](https://user-images.githubusercontent.com/50569248/208440172-6cfd3f21-afce-4dd6-b820-ecaf67ada7c2.png)
+
+Show All Invoices
+
+![all](https://user-images.githubusercontent.com/50569248/208440230-7acd6d2b-f66c-4778-b373-cd594519e488.png)
+
 
 
